@@ -1,14 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using object2DOutlines;
 
 public class StickerPlacer : MonoBehaviour {
 
     public Transform sticker;
 
-    Collider2D collider2D;
+    public StickerList stickerList;
+    public float outlineSize = 3;
+
+    public Transform target;
+    Collider2D targetCollider;
+    public LayerMask targetMask;
+    public LayerMask stickerMask;
+
+    PolygonCollider2D stickerCollider;
     SpriteRenderer sprite;
-    object2DOutlines.concaveOut outline;
+    concaveOut outline;
 
     static Vector2 PIXELSCALE = new Vector2(320, 180);
 
@@ -19,15 +28,26 @@ public class StickerPlacer : MonoBehaviour {
     public float accel = 100;
     public float velocityChange = 500;
 
-    static float RELEASEWAIT = .3f;
+    static float RELEASEWAIT = 1;
     float releaseTime = 0;
     bool push = false;
 
 	// Use this for initialization
 	void Start () {
-        collider2D = sticker.GetComponent<Collider2D>();
-        sprite = sticker.GetComponent<SpriteRenderer>();
-        outline = sticker.GetComponent<object2DOutlines.concaveOut>();
+        targetCollider = target.GetComponent<Collider2D>();
+    }
+
+    GameObject MakeSticker(GameObject spritePrefab)
+    {
+        GameObject nSticker = Instantiate(spritePrefab);
+        concaveOut nOut = nSticker.AddComponent<concaveOut>();
+        nOut.Size_O = outlineSize;
+        nOut.Color_O = Color.white;
+        nOut.active_SO = false;
+        nOut.OrderInLayer_O = 0;
+        SpriteRenderer sprite = nSticker.GetComponent<SpriteRenderer>();
+        sprite.color = Random.ColorHSV(0, 1, 0, 1, 1, 1);
+        return nSticker;
     }
 	
 	// Update is called once per frame
@@ -38,16 +58,31 @@ public class StickerPlacer : MonoBehaviour {
         pos.Scale(PIXELSCALE);
         pos = pos - (PIXELSCALE * .5f);*/
 
+        if(Input.GetButtonDown("Fire1") || Input.GetButtonDown("Jump"))
+        {
+            sticker = MakeSticker(stickerList.stickers[Random.Range(0, stickerList.stickers.Count)]).transform;
+            stickerCollider = sticker.GetComponent<PolygonCollider2D>();
+            sprite = sticker.GetComponent<SpriteRenderer>();
+            outline = sticker.GetComponent<object2DOutlines.concaveOut>();
+        }
+
+        if(sticker == null)
+        {
+            return;
+        }
+
         //COLLISION---------------------
         Collider2D[] collOut = new Collider2D[20];
         ContactFilter2D filter = new ContactFilter2D();
-        if(Physics2D.OverlapCollider(collider2D, filter, collOut) > 0)
+        filter.SetLayerMask(stickerMask);
+        filter.useLayerMask = true;
+        if(Physics2D.OverlapCollider(stickerCollider, filter, collOut) > 0)
         {
             //collision detected!
             outline.Color_O = Color.red;
             if(releaseTime >= RELEASEWAIT)
             {
-                Vector3 pushOut = collider2D.transform.position - collOut[0].transform.position;
+                Vector3 pushOut = stickerCollider.transform.position - collOut[0].transform.position;
                 Vector2 pushDir = new Vector2(pushOut.x, pushOut.y).normalized;
                 velocity = pushDir * minSpeed;
                 push = true;
@@ -59,6 +94,33 @@ public class StickerPlacer : MonoBehaviour {
             push = false;
         }
 
+        //check if the target is overlapped
+        bool withinTarget = true;
+        Vector2 stickerPos = new Vector2(sticker.transform.position.x, sticker.transform.position.y);
+        for(int i = 0; i < stickerCollider.pathCount; i++)
+        {
+            foreach (Vector2 point in stickerCollider.points)
+            {
+                withinTarget = withinTarget && targetCollider.OverlapPoint(point + stickerPos);
+            }
+        }
+        if(!withinTarget)
+        {
+            outline.Color_O = Color.red;
+            if (releaseTime >= RELEASEWAIT)
+            {
+                Vector3 pushOut = target.position - sticker.position;
+                Vector2 pushDir = new Vector2(pushOut.x, pushOut.y).normalized;
+                if (push)
+                {
+                    velocity += pushDir * minSpeed * 2;
+                } else
+                {
+                    velocity = pushDir * minSpeed;
+                    push = true;
+                }
+            }
+        }
 
         //MOVEMENT----------------------
         #region Movement
@@ -80,8 +142,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         else
         {
-            releaseTime = 0;
-            if (velocity.magnitude < minSpeed)
+            if (releaseTime != 0)
             {
                 velocity = inputVec * minSpeed;
             }
@@ -92,6 +153,7 @@ public class StickerPlacer : MonoBehaviour {
             {
                 velocity += velocityChange * inputVec * Time.deltaTime;
             }
+            releaseTime = 0;
         }
         if (velocity.magnitude > maxSpeed)
         {
