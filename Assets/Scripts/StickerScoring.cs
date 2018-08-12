@@ -10,6 +10,7 @@ public class StickerScoring : MonoBehaviour {
 
     public TextMeshPro scoreText;
     public GameObject bonusPrefab;
+    public GameObject scorePopPrefab;
 
     public float score = 0;
 
@@ -48,7 +49,6 @@ public class StickerScoring : MonoBehaviour {
             }
         }
         onTargetAmount = onTargetAmount / collider.points.Length;
-        Debug.Log(onTargetAmount);
         if(onTargetAmount == 1)
         {
             //Nice On!
@@ -131,8 +131,24 @@ public class StickerScoring : MonoBehaviour {
             t.transform.position = Vector3.Scale(sticker.transform.position, new Vector3(1,1,0)) +
                 new Vector3(Mathf.Cos(radialOffset) * 70, Mathf.Sin(radialOffset) * 70,
                     t.transform.position.z);
+            t.GetComponent<TextFade>().velocity = new Vector3(Mathf.Cos(radialOffset) * 10, Mathf.Sin(radialOffset) * 10, 0);
             radialOffset += radDir * Mathf.PI * .1f;
         }
+
+        Vector3 bounds = collider.bounds.extents;
+        float stickerScore = bounds.x + bounds.y;
+        stickerScore *= totalMultiplier;
+        stickerScore = Mathf.Round(stickerScore);
+        ScorePop(stickerScore);
+    }
+
+    void ScorePop(float points)
+    {
+        score += points;
+        scoreText.text = "SCORE: " + score;
+        GameObject pop = Instantiate(scorePopPrefab);
+        TextMeshPro sText = pop.GetComponent<TextMeshPro>();
+        sText.text = "+" + points;
     }
 
     GameObject MakeBonusText(string text, Color color)

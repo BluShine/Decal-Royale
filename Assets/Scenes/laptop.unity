@@ -655,9 +655,9 @@ MonoBehaviour:
   stickerMask:
     serializedVersion: 2
     m_Bits: 1
-  maxSpeed: 200
+  maxSpeed: 100
   minSpeed: 5
-  accel: 400
+  accel: 200
   velocityChange: 20000
 --- !u!4 &797415799
 Transform:
@@ -1322,6 +1322,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1477560225}
   bonusPrefab: {fileID: 1261935997646694, guid: c02886756aedcfc4894396ded46c605a,
+    type: 2}
+  scorePopPrefab: {fileID: 1117143004510320, guid: fa1f5bf642727a34396335d2f15d85a4,
     type: 2}
   score: 0
   comboList: {fileID: 11400000, guid: 2bbcb4a8b3f55e443908bef431c32e90, type: 2}

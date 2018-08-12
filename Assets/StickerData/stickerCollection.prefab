@@ -6083,6 +6083,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5b3b40638d045ef4f9780b9679d7b8e3, type: 2}
   - {fileID: 11400000, guid: 825e60ff23f475840a8051d749fb1eff, type: 2}
   - {fileID: 11400000, guid: cc7e8b7bd817577428f2e6199d2206fe, type: 2}
+  - {fileID: 11400000, guid: 1c38cab820657664c937e650963eb8c7, type: 2}
   prefixName: spooky
   suffixName: skull
 --- !u!114 &114233795628627272
