@@ -782,7 +782,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 'TARGET SCORE: 500'
+  m_text: 'TARGET SCORE: 99999'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1a90ec7b53c3b50468a402294c32f458, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 60e53dd5e26e0104ab888cde8d10b15e, type: 2}
@@ -850,7 +850,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 559369870}
-    characterCount: 17
+    characterCount: 19
     spriteCount: 0
     spaceCount: 2
     wordCount: 3
@@ -2329,13 +2329,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1477560225}
-  targetScoreText: {fileID: 0}
+  targetScoreText: {fileID: 559369870}
   bonusPrefab: {fileID: 1261935997646694, guid: c02886756aedcfc4894396ded46c605a,
     type: 2}
   scorePopPrefab: {fileID: 1117143004510320, guid: fa1f5bf642727a34396335d2f15d85a4,
     type: 2}
   score: 0
-  targetScore: 1000
+  targetScore: 500
   comboList: {fileID: 11400000, guid: 2bbcb4a8b3f55e443908bef431c32e90, type: 2}
 --- !u!1 &1721109769
 GameObject:

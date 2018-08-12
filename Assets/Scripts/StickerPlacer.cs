@@ -147,16 +147,42 @@ public class StickerPlacer : MonoBehaviour {
         ContactFilter2D filter = new ContactFilter2D();
         filter.SetLayerMask(stickerMask);
         filter.useLayerMask = true;
-        if(Physics2D.OverlapCollider(stickerCollider, filter, collOut) > 0)
+        int overlapCount = Physics2D.OverlapCollider(stickerCollider, filter, collOut);
+        if (overlapCount > 0)
         {
-            //collision detected!
-            overlapWarning.enabled = true;
-            if (releaseTime >= RELEASEWAIT)
+            bool allCombos = true;
+            Collider2D notCombo = null;
+            for(int i = 0; i < overlapCount; i++)
             {
-                Vector3 pushOut = stickerCollider.transform.position - collOut[0].transform.position;
-                Vector2 pushDir = new Vector2(pushOut.x, pushOut.y).normalized;
-                velocity = pushDir * minSpeed;
-                push = true;
+                Collider2D c = collOut[i];
+                StickerData sticker1 = sticker.GetComponent<StickerData>();
+                StickerData sticker2 = c.GetComponent<StickerData>();
+                bool comboFound = false;
+                foreach(StickerCombo combo in scoring.comboList.combos)
+                {
+                    comboFound = comboFound || combo.CheckCombo(sticker1.tags, sticker2.tags);
+                }
+                if (!comboFound)
+                {
+                    allCombos = false;
+                    notCombo = c;
+                }
+            }
+            if (!allCombos)
+            {
+                //collision detected!
+                overlapWarning.enabled = true;
+                if (releaseTime >= RELEASEWAIT)
+                {
+                    Vector3 pushOut = stickerCollider.transform.position - notCombo.transform.position;
+                    Vector2 pushDir = new Vector2(pushOut.x, pushOut.y).normalized;
+                    velocity = pushDir * minSpeed;
+                    push = true;
+                }
+            } else
+            {
+                overlapWarning.enabled = false;
+                push = false;
             }
         }
         else

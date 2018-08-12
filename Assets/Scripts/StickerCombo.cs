@@ -31,7 +31,7 @@ public class StickerCombo : ScriptableObject {
         text = text.Replace("$a", top.GetPrefix());
         text = text.Replace("$b", bottom.GetSuffix());
         text = text.ToUpper();
-        text = multiplier + "x " + text;
+        text = "x" + multiplier + " " + text;
         return text;
     }
 }

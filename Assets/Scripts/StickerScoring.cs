@@ -25,6 +25,7 @@ public class StickerScoring : MonoBehaviour {
 	void Start () {
         placer = FindObjectOfType<StickerPlacer>();
         target = placer.target.GetComponent<Collider2D>();
+        targetScoreText.text = "TARGET SCORE: " + targetScore;
 	}
 	
 	// Update is called once per frame
