@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class StickerPlacer : MonoBehaviour {
 
@@ -8,11 +10,20 @@ public class StickerPlacer : MonoBehaviour {
     public Material outlineMat;
     public float outlineRadius = 3;
 
+    public string nextLevel;
+
     public Transform warnings;
     public MeshRenderer overlapWarning;
     public MeshRenderer offEdgeWarning;
+    public TextMeshPro remainingStickersText;
+
+    public GameObject winText;
+    public GameObject loseText;
+    bool finished = false;
+    bool win = false;
 
     public StickerList stickerList;
+    Queue<GameObject> stickerQueue;
     public float outlineSize = 3;
 
     public Transform target;
@@ -47,6 +58,17 @@ public class StickerPlacer : MonoBehaviour {
         scoring = FindObjectOfType<StickerScoring>();
         overlapWarning.enabled = false;
         offEdgeWarning.enabled = false;
+
+        stickerQueue = new Queue<GameObject>();
+        foreach(GameObject g in stickerList.stickers)
+        {
+            stickerQueue.Enqueue(g);
+        }
+
+        remainingStickersText.text = "STICKERS LEFT: " + stickerQueue.Count;
+
+        winText.SetActive(false);
+        loseText.SetActive(false);
     }
 
     GameObject MakeSticker(GameObject spritePrefab)
@@ -87,10 +109,32 @@ public class StickerPlacer : MonoBehaviour {
                 outline.GenerateOutline();
             }
 
-            sticker = MakeSticker(stickerList.stickers[Random.Range(0, stickerList.stickers.Count)]).transform;
-            stickerCollider = sticker.GetComponent<PolygonCollider2D>();
-            sprite = sticker.GetComponent<SpriteRenderer>();
-            outline = sticker.GetComponent<SpriteOutline>();
+            if (stickerQueue.Count == 0)
+            {
+                sticker = null;
+                if(!finished)
+                    FinishLevel();
+            }
+            else
+            {
+                sticker = MakeSticker(stickerQueue.Dequeue()).transform;
+                stickerCollider = sticker.GetComponent<PolygonCollider2D>();
+                sprite = sticker.GetComponent<SpriteRenderer>();
+                outline = sticker.GetComponent<SpriteOutline>();
+            }
+
+            remainingStickersText.text = "STICKERS LEFT: " + stickerQueue.Count;
+        }
+
+        if(finished && Input.GetButtonDown("Submit"))
+        {
+            if(win)
+            {
+                SceneManager.LoadScene(nextLevel);
+            } else
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
 
         if(sticker == null)
@@ -200,5 +244,19 @@ public class StickerPlacer : MonoBehaviour {
         warnings.position = new Vector3(pos.x, pos.y, warnings.position.z);
 
         #endregion
+    }
+
+    void FinishLevel()
+    {
+        finished = true;
+        if(scoring.score >= scoring.targetScore)
+        {
+            win = true;
+            winText.SetActive(true);
+        }
+        else
+        {
+            loseText.SetActive(true);
+        }
     }
 }

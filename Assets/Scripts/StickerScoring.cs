@@ -9,10 +9,12 @@ public class StickerScoring : MonoBehaviour {
     Collider2D target;
 
     public TextMeshPro scoreText;
+    public TextMeshPro targetScoreText;
     public GameObject bonusPrefab;
     public GameObject scorePopPrefab;
 
     public float score = 0;
+    public float targetScore = 1000;
 
     static Color BADCOLOR = new Color(.7f, .7f, .7f);
     static Color VERYBADCOLOR = new Color(.5f, .5f, .5f);
@@ -126,6 +128,10 @@ public class StickerScoring : MonoBehaviour {
             radDir = -1;
         }
         radialOffset += radDir * Mathf.PI * .3f;
+        if(sticker.transform.position.y > 0)
+        {
+            radialOffset += radDir * Mathf.PI * .3f;
+        }
         foreach(GameObject t in bonusTexts)
         {
             t.transform.position = Vector3.Scale(sticker.transform.position, new Vector3(1,1,0)) +
@@ -140,6 +146,11 @@ public class StickerScoring : MonoBehaviour {
         stickerScore *= totalMultiplier;
         stickerScore = Mathf.Round(stickerScore);
         ScorePop(stickerScore);
+
+        if(score >= targetScore)
+        {
+            targetScoreText.color = new Color(.5f, 1, .5f);
+        }
     }
 
     void ScorePop(float points)

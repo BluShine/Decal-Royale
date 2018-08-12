@@ -13,6 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   first: {fileID: 11400000, guid: b3f02835f0ece0149967bb5aa7b1a8e3, type: 2}
   second: {fileID: 11400000, guid: 75de2c0cd4b5b97489c9097bc5bbc52a, type: 2}
-  bonusText: $a flavored $b
+  bonusText: $a $b
   multiplier: 2
   color: {r: 0.9730177, g: 0.4481132, b: 1, a: 1}
