@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using object2DOutlines;
 
 public class StickerPlacer : MonoBehaviour {
 
     public Transform sticker;
+    public Material outlineMat;
+    public float outlineRadius = 3;
 
     public StickerList stickerList;
     public float outlineSize = 3;
@@ -17,7 +18,7 @@ public class StickerPlacer : MonoBehaviour {
 
     PolygonCollider2D stickerCollider;
     SpriteRenderer sprite;
-    concaveOut outline;
+    SpriteOutline outline;
 
     static Vector2 PIXELSCALE = new Vector2(320, 180);
 
@@ -32,6 +33,8 @@ public class StickerPlacer : MonoBehaviour {
     float releaseTime = 0;
     bool push = false;
 
+    float stickerDepth = 500;
+
 	// Use this for initialization
 	void Start () {
         targetCollider = target.GetComponent<Collider2D>();
@@ -40,13 +43,16 @@ public class StickerPlacer : MonoBehaviour {
     GameObject MakeSticker(GameObject spritePrefab)
     {
         GameObject nSticker = Instantiate(spritePrefab);
-        concaveOut nOut = nSticker.AddComponent<concaveOut>();
-        nOut.Size_O = outlineSize;
-        nOut.Color_O = Color.white;
-        nOut.active_SO = false;
-        nOut.OrderInLayer_O = 0;
-        SpriteRenderer sprite = nSticker.GetComponent<SpriteRenderer>();
-        sprite.color = Random.ColorHSV(0, 1, 0, 1, 1, 1);
+
+        SpriteOutline nOut = nSticker.AddComponent<SpriteOutline>();
+        nOut.material = outlineMat;
+        nOut.radius = outlineRadius;
+        nOut.GenerateOutline();
+
+        SpriteRenderer stickerSprite = nSticker.GetComponent<SpriteRenderer>();
+        stickerSprite.color = Random.ColorHSV(0, 1, 0, 1, 1, 1);
+
+        nSticker.transform.position = Vector3.zero;
         return nSticker;
     }
 	
@@ -60,10 +66,19 @@ public class StickerPlacer : MonoBehaviour {
 
         if(Input.GetButtonDown("Fire1") || Input.GetButtonDown("Jump"))
         {
+            if(sticker != null)
+            {
+                sticker.position = new Vector3(sticker.position.x, sticker.position.y, stickerDepth);
+                sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                stickerDepth -= .1f;
+                outline.Color = Color.white;
+                outline.GenerateOutline();
+            }
+
             sticker = MakeSticker(stickerList.stickers[Random.Range(0, stickerList.stickers.Count)]).transform;
             stickerCollider = sticker.GetComponent<PolygonCollider2D>();
             sprite = sticker.GetComponent<SpriteRenderer>();
-            outline = sticker.GetComponent<object2DOutlines.concaveOut>();
+            outline = sticker.GetComponent<SpriteOutline>();
         }
 
         if(sticker == null)
@@ -79,7 +94,7 @@ public class StickerPlacer : MonoBehaviour {
         if(Physics2D.OverlapCollider(stickerCollider, filter, collOut) > 0)
         {
             //collision detected!
-            outline.Color_O = Color.red;
+            outline.Color = Color.red;
             if(releaseTime >= RELEASEWAIT)
             {
                 Vector3 pushOut = stickerCollider.transform.position - collOut[0].transform.position;
@@ -90,7 +105,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         else
         {
-            outline.Color_O = Color.white;
+            outline.Color = Color.white;
             push = false;
         }
 
@@ -106,7 +121,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         if(!withinTarget)
         {
-            outline.Color_O = Color.red;
+            outline.Color = Color.red;
             if (releaseTime >= RELEASEWAIT)
             {
                 Vector3 pushOut = target.position - sticker.position;
@@ -134,9 +149,18 @@ public class StickerPlacer : MonoBehaviour {
 
         if (inputVec.magnitude == 0)
         {
-            if (!push)
+            if (!push || releaseTime < RELEASEWAIT)
             {
                 velocity = Vector2.zero;
+
+                /*//friction
+                if(velocity.magnitude < Time.deltaTime * accel)
+                {
+                    velocity = Vector2.zero;
+                } else
+                {
+                    velocity -= velocity.normalized * Time.deltaTime * accel;
+                }*/
             }
             releaseTime += Time.deltaTime;
         }
