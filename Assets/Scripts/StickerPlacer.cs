@@ -9,6 +9,7 @@ public class StickerPlacer : MonoBehaviour {
     public Transform sticker;
     public Material outlineMat;
     public float outlineRadius = 3;
+    public float stickerScale = 1;
 
     public string nextLevel;
 
@@ -75,6 +76,7 @@ public class StickerPlacer : MonoBehaviour {
     {
         GameObject nSticker = Instantiate(spritePrefab);
         nSticker.name = spritePrefab.name;
+        nSticker.transform.localScale = nSticker.transform.localScale * stickerScale;
 
         SpriteOutline nOut = nSticker.AddComponent<SpriteOutline>();
         nOut.material = outlineMat;
@@ -107,6 +109,7 @@ public class StickerPlacer : MonoBehaviour {
                 stickerDepth -= .1f;
                 outline.Color = Color.white;
                 outline.GenerateOutline();
+                sticker.SetParent(target);
             }
 
             if (stickerQueue.Count == 0)
