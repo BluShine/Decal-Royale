@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0932c189b5533c1458531c2a4532b3af, type: 3}
+  m_Name: HatCombo
+  m_EditorClassIdentifier: 
+  first: {fileID: 11400000, guid: cc7e8b7bd817577428f2e6199d2206fe, type: 2}
+  second: {fileID: 11400000, guid: 1c38cab820657664c937e650963eb8c7, type: 2}
+  bonusText: $a $b
+  multiplier: 2
+  color: {r: 0.2663314, g: 0.7790223, b: 0.990566, a: 1}

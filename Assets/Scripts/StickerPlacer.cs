@@ -39,9 +39,12 @@ public class StickerPlacer : MonoBehaviour {
 
     float stickerDepth = 500;
 
+    StickerScoring scoring;
+
 	// Use this for initialization
 	void Start () {
         targetCollider = target.GetComponent<Collider2D>();
+        scoring = FindObjectOfType<StickerScoring>();
         overlapWarning.enabled = false;
         offEdgeWarning.enabled = false;
     }
@@ -49,6 +52,7 @@ public class StickerPlacer : MonoBehaviour {
     GameObject MakeSticker(GameObject spritePrefab)
     {
         GameObject nSticker = Instantiate(spritePrefab);
+        nSticker.name = spritePrefab.name;
 
         SpriteOutline nOut = nSticker.AddComponent<SpriteOutline>();
         nOut.material = outlineMat;
@@ -75,6 +79,7 @@ public class StickerPlacer : MonoBehaviour {
         {
             if(sticker != null)
             {
+                scoring.ScoreSticker(sticker.gameObject);
                 sticker.position = new Vector3(sticker.position.x, sticker.position.y, stickerDepth);
                 sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
                 stickerDepth -= .1f;
@@ -119,12 +124,9 @@ public class StickerPlacer : MonoBehaviour {
         //check if the target is overlapped
         bool withinTarget = true;
         Vector2 stickerPos = new Vector2(sticker.transform.position.x, sticker.transform.position.y);
-        for(int i = 0; i < stickerCollider.pathCount; i++)
+        foreach (Vector2 point in stickerCollider.points)
         {
-            foreach (Vector2 point in stickerCollider.points)
-            {
-                withinTarget = withinTarget && targetCollider.OverlapPoint(point + stickerPos);
-            }
+            withinTarget = withinTarget && targetCollider.OverlapPoint(point + stickerPos);
         }
         if(!withinTarget)
         {
