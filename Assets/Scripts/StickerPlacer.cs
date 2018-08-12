@@ -8,6 +8,10 @@ public class StickerPlacer : MonoBehaviour {
     public Material outlineMat;
     public float outlineRadius = 3;
 
+    public Transform warnings;
+    public MeshRenderer overlapWarning;
+    public MeshRenderer offEdgeWarning;
+
     public StickerList stickerList;
     public float outlineSize = 3;
 
@@ -38,6 +42,8 @@ public class StickerPlacer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         targetCollider = target.GetComponent<Collider2D>();
+        overlapWarning.enabled = false;
+        offEdgeWarning.enabled = false;
     }
 
     GameObject MakeSticker(GameObject spritePrefab)
@@ -47,6 +53,7 @@ public class StickerPlacer : MonoBehaviour {
         SpriteOutline nOut = nSticker.AddComponent<SpriteOutline>();
         nOut.material = outlineMat;
         nOut.radius = outlineRadius;
+        nOut.Color = Color.white;
         nOut.GenerateOutline();
 
         SpriteRenderer stickerSprite = nSticker.GetComponent<SpriteRenderer>();
@@ -94,8 +101,8 @@ public class StickerPlacer : MonoBehaviour {
         if(Physics2D.OverlapCollider(stickerCollider, filter, collOut) > 0)
         {
             //collision detected!
-            outline.Color = Color.red;
-            if(releaseTime >= RELEASEWAIT)
+            overlapWarning.enabled = true;
+            if (releaseTime >= RELEASEWAIT)
             {
                 Vector3 pushOut = stickerCollider.transform.position - collOut[0].transform.position;
                 Vector2 pushDir = new Vector2(pushOut.x, pushOut.y).normalized;
@@ -105,7 +112,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         else
         {
-            outline.Color = Color.white;
+            overlapWarning.enabled = false;
             push = false;
         }
 
@@ -121,7 +128,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         if(!withinTarget)
         {
-            outline.Color = Color.red;
+            offEdgeWarning.enabled = true;
             if (releaseTime >= RELEASEWAIT)
             {
                 Vector3 pushOut = target.position - sticker.position;
@@ -135,6 +142,9 @@ public class StickerPlacer : MonoBehaviour {
                     push = true;
                 }
             }
+        } else
+        {
+            offEdgeWarning.enabled = false;
         }
 
         //MOVEMENT----------------------
@@ -185,6 +195,7 @@ public class StickerPlacer : MonoBehaviour {
         }
         pos += velocity * Time.deltaTime;
         sticker.transform.position = pos;
+        warnings.position = new Vector3(pos.x, pos.y, warnings.position.z);
 
         #endregion
     }

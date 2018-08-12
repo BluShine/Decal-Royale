@@ -9,7 +9,7 @@ public class SpriteOutline : MonoBehaviour {
     [Range(1,4)]
     public int quality = 2;
     public Material material = null;
-    private Color color;
+    private Color color = Color.white;
 
     public Color Color
     {
@@ -79,5 +79,7 @@ public class SpriteOutline : MonoBehaviour {
 
             sprites.Add(spr);
         }
+
+        UpdateOutlineSprites();
     }
 }
