@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8664d509a74e70c419c70c86c6ed4571, type: 3}
+  m_Name: NotebookStickers
+  m_EditorClassIdentifier: 
+  stickers:
+  - {fileID: 1161036785511746, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1764771492866258, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1454277900377618, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1184177608431442, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1693560891601908, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1897692859323146, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1406934081218760, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1417143706902294, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1376013986830252, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}

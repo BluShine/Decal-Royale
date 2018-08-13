@@ -5,7 +5,34 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Title.unity
+    guid: fcce75be24c6cb349b6890bfab776231
+  - enabled: 1
+    path: Assets/Scenes/laptop.unity
+    guid: 529b37536834df2479003a4d3b5953c3
+  - enabled: 1
+    path: Assets/Scenes/notebook.unity
+    guid: 1a4abb03dc64eec469fed5d5a6f7a088
+  - enabled: 1
+    path: Assets/Scenes/phone.unity
+    guid: 5a32bcb8fbf77dd428bff75c9de93565
+  - enabled: 1
+    path: Assets/Scenes/bottle.unity
+    guid: 11e9196ddbde8894395035f2c828c344
+  - enabled: 1
+    path: Assets/Scenes/car.unity
+    guid: bf7d31d289da10949a2580659e0c16a1
+  - enabled: 1
+    path: Assets/Scenes/ghost.unity
+    guid: 7a2a9e9662ceca24da03575d2924de31
+  - enabled: 1
+    path: Assets/Scenes/dog.unity
+    guid: 459f4e4eb39b90044b6b2963c1bee45c
+  - enabled: 1
+    path: Assets/Scenes/TheEnd.unity
+    guid: 29f18baf180a26f4497fc3f0420e7d26
   m_configObjects: {}

@@ -13,6 +13,9 @@ public class StickerPlacer : MonoBehaviour {
 
     public string nextLevel;
 
+    public AudioSource stickerSound;
+    public AudioSource movementSound;
+
     public Transform warnings;
     public MeshRenderer overlapWarning;
     public MeshRenderer offEdgeWarning;
@@ -101,6 +104,8 @@ public class StickerPlacer : MonoBehaviour {
 
         if(Input.GetButtonDown("Fire1") || Input.GetButtonDown("Jump"))
         {
+            stickerSound.pitch = Random.Range(1, 2.5f);
+            stickerSound.Play();
             if(sticker != null)
             {
                 scoring.ScoreSticker(sticker.gameObject);
@@ -142,6 +147,7 @@ public class StickerPlacer : MonoBehaviour {
 
         if(sticker == null)
         {
+            movementSound.Stop();
             return;
         }
 
@@ -197,9 +203,10 @@ public class StickerPlacer : MonoBehaviour {
         //check if the target is overlapped
         bool withinTarget = true;
         Vector2 stickerPos = new Vector2(sticker.transform.position.x, sticker.transform.position.y);
+        Vector2 stickerScale = new Vector2(sticker.lossyScale.x, sticker.lossyScale.y);
         foreach (Vector2 point in stickerCollider.points)
         {
-            withinTarget = withinTarget && targetCollider.OverlapPoint(point + stickerPos);
+            withinTarget = withinTarget && targetCollider.OverlapPoint(point * stickerScale + stickerPos);
         }
         if(!withinTarget)
         {
@@ -234,6 +241,7 @@ public class StickerPlacer : MonoBehaviour {
 
         if (inputVec.magnitude == 0)
         {
+            movementSound.Stop();
             if (!push || releaseTime < RELEASEWAIT)
             {
                 velocity = Vector2.zero;
@@ -251,6 +259,11 @@ public class StickerPlacer : MonoBehaviour {
         }
         else
         {
+            movementSound.pitch = Mathf.Clamp(movementSound.pitch + Time.deltaTime * Random.Range(-1f,1f) * 2, .75f, 1.5f);
+            if (!movementSound.isPlaying)
+            {
+                movementSound.Play();
+            }
             if (releaseTime != 0)
             {
                 velocity = inputVec * minSpeed;

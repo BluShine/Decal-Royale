@@ -70,6 +70,7 @@ public class SpriteOutline : MonoBehaviour {
             outlineObj.transform.parent = this.transform;
             outlineObj.transform.localPosition = offset;
             outlineObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            outlineObj.transform.localScale = Vector3.one;
 
             SpriteRenderer spr = outlineObj.AddComponent<SpriteRenderer>();
             spr.sharedMaterial = material;

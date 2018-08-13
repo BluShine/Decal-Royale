@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8664d509a74e70c419c70c86c6ed4571, type: 3}
+  m_Name: PhoneStickers
+  m_EditorClassIdentifier: 
+  stickers:
+  - {fileID: 1265672097828716, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1409593463428592, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1372488159892200, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1562402642347084, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1781032886632564, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1601783584012652, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1186642271200060, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}
+  - {fileID: 1848352111320550, guid: ed1acb061f68b9b4ba7ed7b252b03afd, type: 2}

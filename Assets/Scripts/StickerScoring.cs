@@ -13,6 +13,11 @@ public class StickerScoring : MonoBehaviour {
     public GameObject bonusPrefab;
     public GameObject scorePopPrefab;
 
+    public AudioSource comboSound;
+    int comboSoundCounter = 0;
+    int comboSoundIndex = 0;
+    float[] comboPitches = { 1, 9f / 8, 5f / 4, 4f / 3, 3f / 2, 5f / 3, 15f / 8, 2 };
+
     public float score = 0;
     public float targetScore = 1000;
 
@@ -30,7 +35,14 @@ public class StickerScoring : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(comboSoundCounter > 0 && !comboSound.isPlaying)
+        {
+            comboSound.pitch = comboPitches[comboSoundIndex];
+            comboSound.Play();
+            comboSoundIndex++;
+            comboSoundIndex = comboSoundIndex % 8;
+            comboSoundCounter--;
+        }
 	}
 
     public void ScoreSticker(GameObject sticker)
@@ -42,11 +54,16 @@ public class StickerScoring : MonoBehaviour {
 
         Queue<GameObject> bonusTexts = new Queue<GameObject>();
 
+        comboSoundCounter = 0;
+        comboSoundIndex = 0;
+
         //measure how much of the sticker is off-target
         float onTargetAmount = 0;
         foreach(Vector2 point in collider.points)
         {
-            if (target.OverlapPoint(point + new Vector2(sticker.transform.position.x, sticker.transform.position.y)))
+            Vector2 stickerPos = new Vector2(sticker.transform.position.x, sticker.transform.position.y);
+            Vector2 stickerScale = new Vector2(sticker.transform.lossyScale.x, sticker.transform.lossyScale.y);
+            if (target.OverlapPoint(point * stickerScale + stickerPos))
             {
                 onTargetAmount++;
             }
@@ -90,6 +107,7 @@ public class StickerScoring : MonoBehaviour {
                     bonusTexts.Enqueue(MakeBonusText(combo.GetComboString(topData, bottomData), combo.color));
                     comboCollisions++;
                     comboFound = true;
+                    comboSoundCounter++;
                 }
             }
             if(!comboFound)
